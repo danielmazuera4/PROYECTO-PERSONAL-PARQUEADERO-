@@ -1,0 +1,268 @@
+@import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@600;700&display=swap');
+
+.mensualidad-page .display-6 {
+    font-family: 'Rajdhani', sans-serif;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+}
+
+.mensualidad-page .card {
+    border-radius: 0.95rem;
+    border: 1px solid #e3eaf3;
+}
+
+.monthly-btn-back {
+    border: 1px solid #d3dfec;
+    background: #ffffff;
+    color: #2d425c;
+    font-weight: 700;
+    border-radius: 0.55rem;
+    transition: all 0.2s ease;
+}
+
+.monthly-btn-back:hover,
+.monthly-btn-back:focus {
+    background: #355f94;
+    border-color: #355f94;
+    color: #ffffff;
+}
+
+.mensualidad-placa-input {
+    text-transform: uppercase;
+    font-size: 1.4rem;
+    letter-spacing: 0.16em;
+}
+
+.placa-filtro-input {
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-weight: 700;
+    text-align: center;
+}
+
+.monthly-search-form {
+    max-width: 860px;
+    margin: 0 auto;
+}
+
+.monthly-search-label {
+    display: block;
+    text-align: center;
+}
+
+.monthly-search-actions {
+    justify-content: center;
+}
+
+.placa-tag {
+    width: 96px;
+    font-family: 'Courier New', Courier, monospace;
+    letter-spacing: 0.08em;
+    border-radius: 0.65rem !important;
+    border: 1px solid #d7dde6;
+    background: #ffffff;
+    color: #1f2a37;
+}
+
+.hora-txt {
+    font-size: 0.95rem;
+}
+
+.table thead th {
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-size: 0.74rem;
+    white-space: nowrap;
+}
+
+.table td,
+.table th {
+    vertical-align: middle;
+}
+
+.monthly-table-wrap {
+    border-top: 1px solid #e3ebf4;
+    border-radius: 0 0 0.9rem 0.9rem;
+    overflow: hidden;
+}
+
+.monthly-table thead th {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    background: #eef2f7;
+    color: #2b3440;
+    border-bottom: 1px solid #dbe5f0;
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+    text-align: center;
+}
+
+.monthly-row-item td {
+    padding-top: 0.78rem;
+    padding-bottom: 0.78rem;
+    border-color: #edf2f8;
+    text-align: center;
+}
+
+.monthly-table tbody tr:nth-child(even) {
+    background: #f8fafc;
+}
+
+.monthly-table tbody tr:hover {
+    background: #eaf0f7;
+}
+
+.monthly-status {
+    border-radius: 999px;
+    font-size: 0.72rem;
+    letter-spacing: 0.04em;
+    font-weight: 700;
+    padding: 0.42rem 0.66rem !important;
+    align-items: center;
+    border: 1px solid transparent;
+    color: #1f2937;
+}
+
+.monthly-status-payment {
+    background: #e7efff;
+    border-color: #c8d8ff;
+    color: #1e3a8a;
+}
+
+.monthly-status-inside {
+    background: #e8f6ee;
+    border-color: #cbe8d7;
+    color: #16603d;
+}
+
+.monthly-status-out {
+    background: #eef1f5;
+    border-color: #d8dee7;
+    color: #374151;
+}
+
+.status-cell {
+    min-width: 190px;
+    text-align: center;
+}
+
+.status-note {
+    display: block;
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    text-align: center;
+}
+
+.status-cell .monthly-status {
+    justify-content: center;
+}
+
+.status-note-payment {
+    color: #2452b5;
+}
+
+.status-note-inside {
+    color: #4b5563;
+}
+
+.status-note-out {
+    color: #445066;
+}
+
+.time-block {
+    line-height: 1.1;
+    text-align: center;
+}
+
+.time-block .hora-txt {
+    font-size: 0.95rem;
+    font-weight: 700;
+}
+
+.time-block small {
+    display: block;
+    font-size: 0.86rem;
+    font-weight: 700;
+    color: #334155 !important;
+}
+
+.monthly-expire-badge {
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 0.38rem 0.52rem;
+}
+
+.monthly-operator {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.2rem;
+    background: #f6f8fb;
+    border: 1px solid #e2e8f0;
+    color: #2f3b4b !important;
+    border-radius: 0.5rem;
+    padding: 0.35rem 0.5rem;
+}
+
+.monthly-table-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.55rem;
+}
+
+.meta-pill {
+    display: inline-flex;
+    align-items: center;
+    background: #ffffff;
+    border: 1px solid #dce6f2;
+    color: #4a5a6c;
+    border-radius: 999px;
+    padding: 0.28rem 0.7rem;
+    font-size: 0.78rem;
+    font-weight: 700;
+}
+
+.card-header {
+    border-radius: 1rem 1rem 0 0 !important;
+}
+
+.pagination .page-link {
+    border-radius: 999px;
+    margin: 0 0.2rem;
+    border: 1px solid #d3dfec;
+    color: #2c4e75;
+    font-weight: 700;
+    min-width: 94px;
+    text-align: center;
+}
+
+.pagination .page-item.active .page-link,
+.pagination .page-link:hover {
+    background: #355f94;
+    border-color: #355f94;
+    color: #ffffff;
+}
+
+@media (max-width: 768px) {
+    .mensualidad-placa-input {
+        letter-spacing: 0.1em;
+        font-size: 1.2rem;
+    }
+
+    .placa-tag {
+        width: 84px;
+    }
+
+    .monthly-row-item td {
+        min-width: 126px;
+    }
+
+    .monthly-search-actions {
+        justify-content: stretch;
+    }
+
+    .monthly-search-actions .btn {
+        width: 100%;
+    }
+}

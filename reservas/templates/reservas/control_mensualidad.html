@@ -1,0 +1,181 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/control_mensualidades.css' %}">
+{% endblock %}
+
+
+{% block title %}Gestión de Mensualidades{% endblock %}
+
+{% block content %}
+<div class="container py-4 mensualidad-page">
+    <div class="d-flex justify-content-between align-items-start mb-4 flex-wrap gap-2">
+        <div class="text-center text-md-start flex-grow-1">
+            <h1 class="display-6 fw-bold text-primary mb-1">Control de Mensualidades</h1>
+            <p class="text-muted mb-0">Registro exclusivo para vehículos con contrato mensual</p>
+        </div>
+        <a href="{% url 'menu_principal' %}" class="btn monthly-btn-back btn-sm px-3 py-2">
+            Volver al inicio
+        </a>
+    </div>
+
+    <div class="card shadow-sm border-0 mb-5">
+        <div class="card-body p-4">
+            <form method="POST">
+                {% csrf_token %}
+                <div class="row g-3 justify-content-center">
+                    <div class="col-12 col-md-6">
+                        <label class="form-label fw-bold text-dark">Placa del Vehículo</label>
+                           <input type="text" name="placa" class="form-control form-control-lg text-center fw-bold mensualidad-placa-input"
+                               placeholder="ABC123" required>
+                    </div>
+                    <div class="col-12 col-md-8 d-flex gap-3">
+                        <button type="submit" name="accion" value="entrada" class="btn btn-success btn-lg w-100 py-3 shadow-sm fw-bold">
+                            <i class="fas fa-sign-in-alt me-2"></i> REGISTRAR ENTRADA
+                        </button>
+                        <button type="submit" name="accion" value="salida" class="btn btn-danger btn-lg w-100 py-3 shadow-sm fw-bold">
+                            <i class="fas fa-sign-out-alt me-2"></i> REGISTRAR SALIDA
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="card shadow-sm border-0">
+        <div class="card-header bg-dark text-white py-3">
+            <h5 class="mb-0"><i class="fas fa-list me-2"></i>Movimientos y Pagos Mensuales</h5>
+        </div>
+        <div class="card-body border-bottom bg-light">
+            <form method="GET" class="row g-2 align-items-end justify-content-center monthly-search-form">
+                <div class="col-12 col-md-6 monthly-search-input-wrap">
+                    <label class="form-label fw-bold mb-1 monthly-search-label">Buscar por placa</label>
+                    <input type="text" name="placa_buscar" value="{{ placa_filtro }}" class="form-control placa-filtro-input" placeholder="Ej: ABC123">
+                </div>
+                <div class="col-12 col-md-6 d-flex gap-2 monthly-search-actions">
+                    <button type="submit" class="btn btn-primary px-4">Buscar</button>
+                    <a href="{% url 'control_mensualidad' %}" class="btn btn-outline-secondary">Limpiar</a>
+                </div>
+            </form>
+            <div class="monthly-table-meta mt-3">
+                <span class="meta-pill">Total registros: {{ total_resultados }}</span>
+            </div>
+        </div>
+
+        <div class="table-responsive monthly-table-wrap">
+            <table class="table table-hover align-middle mb-0 monthly-table">
+                <thead class="table-light">
+                    <tr>
+                        <th>Placa</th>
+                        <th>Estado</th>
+                        <th>Entrada</th>
+                        <th>Salida</th>
+                        <th>Vencimiento</th>
+                        <th>Operario</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for mov in ultimos_movimientos %}
+                    <tr class="monthly-row-item">
+                        <td>
+                            <div class="placa-tag text-center fw-bold py-1 px-2 shadow-sm">
+                                {{ mov.placa|upper }}
+                            </div>
+                        </td>
+                        <td class="status-cell text-center">
+                            {% if mov.es_pago_mensualidad %}
+                                <span class="badge monthly-status monthly-status-payment d-inline-flex mb-1">
+                                    <i class="fas fa-money-check-alt me-1"></i> PAGO DE MENSUALIDAD
+                                </span>
+                                <small class="status-note status-note-payment">Pago adelantado</small>
+                            {% elif not mov.fecha_salida %}
+                                <span class="badge monthly-status monthly-status-inside d-inline-flex mb-1">
+                                    <i class="fas fa-parking me-1"></i> EN PARQUEADERO
+                                </span>
+                                <small class="status-note status-note-inside">Pendiente por salir</small>
+                            {% else %}
+                                <span class="badge monthly-status monthly-status-out d-inline-flex mb-1">
+                                    <i class="fas fa-road me-1"></i> FUERA
+                                </span>
+                                <small class="status-note status-note-out">Pendiente por entrar</small>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <div class="time-block">
+                                {% if mov.fecha_entrada %}
+                                    <span class="fw-bold d-block text-dark hora-txt">{{ mov.fecha_entrada|date:"h:i:s A" }}</span>
+                                    <small class="text-muted d-block">{{ mov.fecha_entrada|date:"d/m/Y" }}</small>
+                                {% elif mov.fecha_salida %}
+                                    <span class="fw-bold d-block text-dark hora-txt">---</span>
+                                    <small class="text-muted d-block">{{ mov.fecha_salida|date:"d/m/Y" }}</small>
+                                {% else %}
+                                    <span class="text-muted small">---</span>
+                                {% endif %}
+                            </div>
+                        </td>
+                        <td>
+                            {% if mov.fecha_salida %}
+                                <div class="time-block">
+                                    <span class="fw-bold d-block text-dark hora-txt">{{ mov.fecha_salida|date:"h:i:s A" }}</span>
+                                    <small class="text-muted d-block">{{ mov.fecha_salida|date:"d/m/Y" }}</small>
+                                </div>
+                            {% else %}
+                                <span class="text-muted small">---</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if mov.fecha_vencimiento %}
+                                <span class="badge monthly-expire-badge bg-danger-subtle text-danger border border-danger">
+                                    {{ mov.fecha_vencimiento|date:"d/m/Y" }}
+                                </span>
+                            {% else %}
+                                <span class="text-muted">-</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <span class="small text-primary fw-bold monthly-operator">
+                                <i class="fas fa-user-edit me-1"></i>{{ mov.operario.username|default:"---" }}
+                            </span>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="6" class="text-center py-5 text-muted">
+                            <i class="fas fa-calendar-times d-block mb-2 fs-2"></i>
+                            No se encontraron registros para esta consulta.
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        {% if ultimos_movimientos.paginator.num_pages > 1 %}
+        <div class="card-footer bg-white border-0 py-3">
+            <nav aria-label="Paginación mensualidades">
+                <ul class="pagination justify-content-center mb-0">
+                    {% if ultimos_movimientos.has_previous %}
+                    <li class="page-item"><a class="page-link" href="?page={{ ultimos_movimientos.previous_page_number }}{% if placa_filtro %}&placa_buscar={{ placa_filtro }}{% endif %}">Atrás</a></li>
+                    {% endif %}
+
+                    <li class="page-item disabled"><span class="page-link text-dark fw-bold">Página {{ ultimos_movimientos.number }} de {{ ultimos_movimientos.paginator.num_pages }}</span></li>
+
+                    {% if ultimos_movimientos.has_next %}
+                    <li class="page-item"><a class="page-link" href="?page={{ ultimos_movimientos.next_page_number }}{% if placa_filtro %}&placa_buscar={{ placa_filtro }}{% endif %}">Siguiente</a></li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+{% if ticket_mensualidad_id %}
+<script>
+    window.addEventListener('load', function () {
+        window.open("{% url 'ticket_mensualidad_pdf' ticket_mensualidad_id %}", '_blank');
+    });
+</script>
+{% endif %}
+{% endblock %}

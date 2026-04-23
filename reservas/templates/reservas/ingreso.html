@@ -1,0 +1,83 @@
+{% extends 'base.html' %} 
+{% load static %} 
+
+{% block extra_css %}
+  <link rel="stylesheet" href="{% static 'css/ingreso.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="seccion-ingreso page-shell">
+    <div class="tarjeta-panel">
+        <h2 class="titulo-panel">INGRESO</h2>
+
+        <form method="post" id="form-ingreso-digital">
+            {% csrf_token %}
+            
+            <div class="contenedor-input-placa mb-3">
+                <input
+                    type="text"
+                    name="placa"
+                    id="inputPlaca"
+                    class="form-control input-placa-dinamico"
+                    placeholder="PLACA"
+                    maxlength="6"
+                    required
+                    autocomplete="off"
+                    autofocus
+                />
+            </div>
+
+            <div class="row g-2 mb-4 selector-vehiculo">
+                <div class="col-6">
+                    <input type="radio" class="btn-check" name="tipo" id="radioCarro" value="CARRO" checked>
+                    <label class="btn btn-outline-primary w-100" for="radioCarro">🚗 CARRO</label>
+                </div>
+                <div class="col-6">
+                    <input type="radio" class="btn-check" name="tipo" id="radioMoto" value="MOTO">
+                    <label class="btn btn-outline-primary w-100" for="radioMoto">🏍️ MOTO</label>
+                </div>
+            </div>
+
+            <button type="submit" class="btn-accion-premium">
+                 REGISTRAR INGRESO
+            </button>
+        </form>
+
+        <a href="{% url 'menu_principal' %}" class="link-volver">
+            Volver al panel
+        </a>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const inputPlaca = document.getElementById('inputPlaca');
+        const radioCarro = document.getElementById('radioCarro');
+        const radioMoto = document.getElementById('radioMoto');
+
+        inputPlaca.addEventListener('input', (e) => {
+            let val = e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
+            e.target.value = val;
+
+            if (val.length === 6) {
+                // LÓGICA DE DETECCIÓN (Colombia): 
+                // Carro: ABC123 (Último es número)
+                // Moto:  ABC12D (Último es letra)
+                const ultimoCaracter = val.slice(-1);
+                
+                if (isNaN(ultimoCaracter)) {
+                    // Es una letra -> MOTO
+                    radioMoto.checked = true;
+                    inputPlaca.style.borderColor = "#0dcaf0"; // Color moto
+                } else {
+                    // Es un número -> CARRO
+                    radioCarro.checked = true;
+                    inputPlaca.style.borderColor = "#0d6efd"; // Color carro
+                }
+            } else {
+                inputPlaca.style.borderColor = "#e5e7eb";
+            }
+        });
+    });
+</script>
+{% endblock %}

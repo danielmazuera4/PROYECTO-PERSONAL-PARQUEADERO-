@@ -1,0 +1,25 @@
+{% load static %}
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login - Parqueadero</title>
+    <link rel="stylesheet" href="{% static 'css/login.css' %}">
+  </head>
+  <body class="login-body">
+    <main class="login-shell">
+      <section class="login-card">
+        <span class="login-chip">Acceso Operativo</span>
+        <h1>Parqueadero Express</h1>
+        <p>Inicia sesión para gestionar ingresos, salidas y mensualidades.</p>
+
+        <form method="post" class="login-form">
+          {% csrf_token %}
+          {{ form.as_p }}
+          <button type="submit" class="login-btn">Ingresar al sistema</button>
+        </form>
+      </section>
+    </main>
+  </body>
+</html>

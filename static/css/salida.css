@@ -1,0 +1,110 @@
+.salida-page {
+    max-width: 860px;
+    margin: 0 auto;
+}
+
+.salida-header {
+    margin-bottom: 1.15rem;
+}
+
+.page-chip {
+    display: inline-block;
+    padding: 0.34rem 0.8rem;
+    border-radius: 999px;
+    border: 1px solid #f2cf73;
+    background: #fff4d5;
+    color: #7a5600;
+    text-transform: uppercase;
+    font-size: 0.74rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+}
+
+.titulo-salida {
+    margin: 0.8rem 0 0.35rem;
+    font-size: clamp(1.6rem, 4.5vw, 2.4rem);
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+
+.salida-subtitle {
+    color: #5f6f80;
+    margin-bottom: 0;
+}
+
+.salida-search-form {
+    background: #fff;
+    border: 1px solid #dce6f2;
+    border-radius: 1rem;
+    padding: 1rem;
+    box-shadow: 0 14px 26px rgba(18, 30, 45, 0.09);
+}
+
+.search-group {
+    max-width: 520px;
+}
+
+.salida-input {
+    text-transform: uppercase;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+}
+
+.salida-search-btn {
+    font-weight: 700;
+}
+
+.contenedor-busqueda {
+    margin-top: 1rem;
+    border: 1px solid #d8e4f2;
+    border-left: 6px solid #2287ff;
+    border-radius: 1rem;
+    padding: 1.15rem;
+    background: #fff;
+    box-shadow: 0 20px 34px rgba(18, 30, 45, 0.1);
+}
+
+.result-title {
+    color: #1c2b3d;
+    margin-bottom: 0.5rem;
+}
+
+.result-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 0.3rem 1rem;
+}
+
+.alerta-precio {
+    margin-top: 0.65rem;
+    background: #eef6ff;
+    border: 1px dashed #8cc0ff;
+    border-radius: 0.85rem;
+    padding: 0.95rem;
+}
+
+.price-value {
+    font-size: clamp(1.15rem, 3vw, 1.45rem);
+}
+
+.salida-confirm-btn {
+    font-weight: 800;
+    letter-spacing: 0.02em;
+}
+
+.salida-back-btn {
+    font-weight: 700;
+    border: 1px solid #d3dfec;
+    background: #ffffff;
+    color: #2d425c;
+    border-radius: 0.55rem;
+    transition: all 0.2s ease;
+}
+
+.salida-back-btn:hover,
+.salida-back-btn:focus {
+    background: #355f94;
+    border-color: #355f94;
+    color: #ffffff;
+}

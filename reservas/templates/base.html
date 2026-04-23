@@ -1,0 +1,70 @@
+{% load static %}
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block title %}Parqueadero ADSO{% endblock %}</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+
+    {% block extra_css %}{% endblock %}
+  </head>
+  <body class="site-body">
+    <div class="main-wrapper">
+      <nav class="navbar navbar-expand-lg site-navbar">
+        <div class="container">
+          <a class="navbar-brand site-brand" href="{% url 'menu_principal' %}">
+            <i class="bi bi-cone-striped"></i>
+            Parqueadero Express
+          </a>
+          
+          <div class="navbar-nav ms-auto align-items-center nav-actions">
+            {% if user.is_authenticated %}
+              <span class="nav-link nav-user">Hola, <strong>{{ user.username }}</strong></span>
+              
+              {% if user.is_superuser %}
+                <a class="nav-item nav-link btn btn-sm nav-cta" href="{% url 'admin:index' %}">
+                  Admin Django
+                </a>
+              {% endif %}
+
+              <form action="{% url 'logout' %}" method="post" class="logout-form">
+                {% csrf_token %}
+                <button type="submit" class="nav-link btn btn-sm btn-logout nav-cta">
+                  Cerrar Sesión
+                </button>
+              </form>
+            {% endif %}
+          </div>
+        </div>
+      </nav>
+
+      <div class="container mt-4">
+        {% if messages %} 
+          {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show shadow-sm">
+              {{ message }}
+              <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+          {% endfor %} 
+        {% endif %} 
+        
+        <div class="content-body">
+          {% block content %}{% endblock %}
+        </div>
+      </div>
+    </div>
+
+    <footer class="footer">
+      <div class="container">
+        <p class="mb-0">&copy; 2026 - <strong>Sistema de Gestión de Parqueadero</strong> - ADSO SENA</p>
+        <small>Software de alta precisión para control de vehículos</small>
+      </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>

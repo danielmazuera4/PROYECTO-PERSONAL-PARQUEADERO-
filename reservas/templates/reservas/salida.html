@@ -1,0 +1,91 @@
+{% extends 'base.html' %} 
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/salida.css' %}">
+{% endblock %}
+
+{% block content %}
+<section class="salida-page">
+  <header class="salida-header">
+    <span class="page-chip">Control de salida</span>
+    <h2 class="titulo-salida">SALIDA DE VEHICULO</h2>
+    <p class="salida-subtitle">Busca la placa para procesar cobro, confirmar salida y generar recibo.</p>
+  </header>
+
+  {% if aviso_mensualidad %}
+  <div class="alert alert-warning border-0 shadow-sm mb-4">
+    <strong>Mensualidad activa:</strong> {{ aviso_mensualidad }}
+    <div class="mt-3">
+      <a href="{% url 'control_mensualidad' %}" class="btn btn-warning btn-sm fw-bold">
+        Ir a mensualidades
+      </a>
+    </div>
+  </div>
+  {% endif %}
+
+  <form method="post" class="mb-4 salida-search-form">
+    {% csrf_token %}
+    <div class="input-group search-group">
+      <input
+        type="text"
+        name="placa_buscar"
+        class="form-control salida-input"
+        placeholder="PLACA A BUSCAR"
+        required
+      />
+      <button class="btn btn-primary salida-search-btn" type="submit">
+        <i class="bi bi-search"></i> Buscar
+      </button>
+    </div>
+  </form>
+
+{% if reserva %}
+<div class="contenedor-busqueda">
+  <h3 class="result-title">Datos del vehiculo encontrado</h3>
+  <hr />
+  <div class="result-grid">
+    <p><strong>Placa:</strong> <span class="badge text-bg-dark fs-6">{{ reserva.placa }}</span></p>
+    <p><strong>Tipo:</strong> {{ reserva.tipo_vehiculo }}</p>
+    <p><strong>Modalidad:</strong> {{ reserva.get_modalidad_display }}</p>
+    <p><strong>Hora de Entrada:</strong> {{ reserva.fecha_entrada|date:"d/m/Y H:i" }}</p>
+  </div>
+
+  <div class="alerta-precio">
+    <h4 class="mb-0 text-dark price-value">
+      VALOR A COBRAR: 
+      <span class="text-success fw-bold">
+        {% if reserva.modalidad == 'MENSUALIDAD' %}
+          $0 (Mensualidad al día)
+        {% else %}
+          ${{ reserva.total_estimado|default:"0" }}
+        {% endif %}
+      </span>
+    </h4>
+    <small class="text-muted">Informe al cliente antes de confirmar la salida.</small>
+  </div>
+  <form method="post">
+    {% csrf_token %}
+    <input type="hidden" name="placa_buscar" value="{{ reserva.placa }}" />
+    <button type="submit" name="confirmar_salida" class="btn btn-success btn-lg w-100 mt-3 salida-confirm-btn">
+      ✅ CONFIRMAR SALIDA Y GENERAR RECIBO
+    </button>
+  </form>
+</div>
+{% endif %}
+
+<hr class="mt-5 mb-4" />
+<div class="d-flex justify-content-start mb-5 pb-4">
+  <a href="{% url 'menu_principal' %}" class="btn salida-back-btn btn-sm px-3 py-2">
+    Volver al inicio
+  </a>
+</div>
+</section>
+
+{% if ticket_salida_id %}
+<script>
+  window.open("{% url 'generar_pdf_salida' ticket_salida_id %}", "_blank");
+</script>
+{% endif %} 
+
+{% endblock %}

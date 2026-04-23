@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Panel de Control - Parqueadero ADSO{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/menu.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container py-5 menu-page">
+    <div class="row mb-5 hero-row">
+        <div class="col-12 text-center">
+            <span class="hero-chip">Centro de Operaciones</span>
+            <h1 class="hero-title">Panel de Gestión</h1>
+            <p class="hero-subtitle">Bienvenido, <strong>{{ user.username }}</strong>. Selecciona una operación.</p>
+            <div class="hero-divider mx-auto"></div>
+        </div>
+    </div>
+
+    <div class="row g-4 menu-grid">
+        <div class="col-12 col-md-4">
+            <a href="{% url 'ingreso' %}" class="menu-card border-ingreso">
+                <div class="menu-icon"><i class="bi bi-box-arrow-in-down"></i></div>
+                <div class="card-title-custom">REGISTRAR INGRESO</div>
+                <p class="card-desc">Asignar puesto, registrar placa y hora de entrada de vehículos.</p>
+                <span class="badge rounded-pill text-bg-success px-3">Entrada</span>
+            </a>
+        </div>
+
+        <div class="col-12 col-md-4">
+            <a href="{% url 'salida' %}" class="menu-card border-salida">
+                <div class="menu-icon"><i class="bi bi-box-arrow-right"></i></div>
+                <div class="card-title-custom">REGISTRAR SALIDA</div>
+                <p class="card-desc">Cálculo automático de tarifas, cobros y liberación de espacios.</p>
+                <span class="badge rounded-pill text-bg-primary px-3">Cobros</span>
+            </a>
+        </div>
+
+        <div class="col-12 col-md-4">
+            <a href="{% url 'control_mensualidad' %}" class="menu-card border-mensual">
+                <div class="menu-icon"><i class="bi bi-calendar-check"></i></div>
+                <div class="card-title-custom">MENSUALIDADES</div>
+                <p class="card-desc">Administrar clientes VIP, suscripciones y pagos mensuales.</p>
+                <span class="badge rounded-pill text-bg-warning px-3">Usuarios</span>
+            </a>
+        </div>
+    </div>
+
+    <div class="row mt-5 pt-5 text-center clock-row">
+        <div class="col-12">
+            <p class="text-muted small clock-text">
+                <i class="bi bi-clock"></i> Hora del sistema: <span id="reloj" class="fw-semibold">{% now "H:i" %}</span>
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}

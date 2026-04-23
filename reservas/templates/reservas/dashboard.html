@@ -1,0 +1,214 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+{% endblock %}
+{% load humanize %}
+
+{% block content %}
+
+<div class="container-fluid mt-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>🚀 Panel de Control - Supervisor</h2>
+    <h4 class="text-muted">
+      📅 {% if fecha_inicio == fecha_fin %}{{ fecha_inicio|date:"d/m/Y" }}{% else %}{{ fecha_inicio|date:"d/m/y" }} - {{ fecha_fin|date:"d/m/y" }}{% endif %}
+    </h4>
+  </div>
+
+  <div class="card p-3 mb-4 shadow-sm border-0 dashboard-filter-card">
+    <form method="GET" class="row g-3 align-items-end">
+      <div class="col-md-3">
+        <label class="fw-bold mb-1">Desde:</label>
+        <input type="date" name="fecha_inicio" class="form-control" value="{{ fecha_inicio|date:'Y-m-d' }}" />
+      </div>
+      <div class="col-md-3">
+        <label class="fw-bold mb-1">Hasta:</label>
+        <input type="date" name="fecha_fin" class="form-control" value="{{ fecha_fin|date:'Y-m-d' }}" />
+      </div>
+      <div class="col-md-3">
+        <label class="fw-bold mb-1">🔎 Placa (Opcional):</label>
+        <input type="text" name="buscar_placa" class="form-control filtro-placa-input" placeholder="ABC123" value="{{ buscar_placa }}">
+      </div>
+      <div class="col-md-3 d-flex gap-2">
+        <button type="submit" class="btn btn-primary flex-grow-1">🔍 Filtrar</button>
+        <a href="{% url 'dashboard_admin' %}" class="btn btn-outline-secondary">Hoy</a>
+      </div>
+    </form>
+  </div>
+
+  <div class="grid-estadisticas">
+    <div class="tarjeta verde">
+      <h5>Total Recaudado</h5>
+      <p class="stat-total">${{ total_hoy|intcomma }}</p>
+    </div>
+    <div class="tarjeta morado">
+      <h5>Ingresos Día/Hora</h5>
+      <p class="stat-medium">${{ total_dia_hora|intcomma }}</p>
+    </div>
+    <div class="tarjeta azul">
+      <h5>Ingresos Mensualidad</h5>
+      <p class="stat-medium">${{ total_mensualidad|intcomma }}</p>
+    </div>
+    <div class="tarjeta naranja">
+      <h5>Ocupación Actual</h5>
+      <p class="stat-occupancy">🚗 {{ carros_activos }} Carros | 🏍️ {{ motos_activos }} Motos</p>
+    </div>
+  </div>
+
+  <div class="detalle-ingresos">
+    <div class="bloque-detalle">
+      <h4 class="text-primary"><i class="bi bi-clock"></i> Detalle Día/Hora</h4>
+      <div class="fila-detalle">
+        <span>Recaudo Carros:</span>
+        <strong>${{ total_dia_hora_carro|intcomma }}</strong>
+      </div>
+      <div class="fila-detalle">
+        <span>Recaudo Motos:</span>
+        <strong>${{ total_dia_hora_moto|intcomma }}</strong>
+      </div>
+    </div>
+
+    <div class="bloque-detalle">
+      <h4 class="text-success"><i class="bi bi-calendar-check"></i> Detalle Mensualidad</h4>
+      <div class="fila-detalle">
+        <span>Recaudo Carros:</span>
+        <strong>${{ total_mensualidad_carro|intcomma }}</strong>
+      </div>
+      <div class="fila-detalle">
+        <span>Recaudo Motos:</span>
+        <strong>${{ total_mensualidad_moto|intcomma }}</strong>
+      </div>
+    </div>
+  </div>
+
+  <hr class="my-4" />
+
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h3 class="mb-0">
+      📋 Historial de Movimientos
+      {% if buscar_placa %}
+        <span class="badge bg-info">Placa: {{ buscar_placa|upper }}</span>
+      {% endif %}
+    </h3>
+
+    <a href="{% url 'reporte_diario_pdf' %}?fecha_inicio={{ fecha_inicio|date:'Y-m-d' }}&fecha_fin={{ fecha_fin|date:'Y-m-d' }}" 
+       target="_blank" class="btn-print">
+      <span>🖨️</span> Imprimir Reporte Rango
+    </a>
+  </div>
+
+  <h4 class="text-primary mt-4 mb-3"><i class="bi bi-clock-history"></i> Registros de Día / Hora</h4>
+  <div class="table-responsive dashboard-table-wrap mb-5">
+    <table class="table table-hover shadow-sm dashboard-table">
+      <thead class="table-dark">
+        <tr>
+          <th>Placa</th>
+          <th>Tipo</th>
+          <th>Fecha</th>
+          <th>Entrada</th>
+          <th>Salida</th>
+          <th>Operario</th>
+          <th>Total Pagado</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for r in historial %}
+          {% if r.modalidad == 'DIA_HORA' %}
+          <tr>
+            <td class="fw-bold text-primary">{{ r.placa|upper }}</td>
+            <td>{{ r.tipo_vehiculo }}</td>
+            <td class="text-muted">{% if r.fecha_entrada %}{{ r.fecha_entrada|date:"d/m/Y" }}{% elif r.fecha_salida %}{{ r.fecha_salida|date:"d/m/Y" }}{% else %}---{% endif %}</td>
+            <td>{% if r.fecha_entrada %}{{ r.fecha_entrada|date:"h:i A" }}{% else %}---{% endif %}</td>
+            <td>
+              {% if r.fecha_salida %} 
+                {{ r.fecha_salida|date:"h:i A" }} 
+              {% else %}
+                <span class="badge bg-success">En Parqueadero</span>
+              {% endif %}
+            </td>
+            <td class="text-muted">{{ r.operario.username|default:"---" }}</td>
+            <td class="fw-bold text-success">${{ r.total_pagar|default:0|intcomma }}</td>
+            <td>
+              <a href="{% url 'eliminar_reserva' r.id %}" class="btn-eliminar" onclick="return confirm('¿Seguro que quieres borrar este registro?');">Eliminar</a>
+            </td>
+          </tr>
+          {% endif %}
+        {% empty %}
+          <tr><td colspan="8" class="text-muted">No hay movimientos registrados en este rango.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <h4 class="text-success mb-3"><i class="bi bi-calendar-check"></i> Movimientos de Mensualidad</h4>
+  <div class="table-responsive dashboard-table-wrap dashboard-table-wrap-last mb-5">
+    <table class="table table-hover shadow-sm dashboard-table">
+      <thead class="table-dark">
+        <tr>
+          <th>Placa</th>
+          <th>Tipo</th>
+          <th>Fecha</th>
+          <th>Entrada</th>
+          <th>Salida</th>
+          <th>Operario</th>
+          <th>Detalle / Estado</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for r in historial %}
+          {% if r.modalidad == 'MENSUALIDAD' %}
+          <tr class="monthly-row">
+            <td class="fw-bold text-success">{{ r.placa|upper }}</td>
+            <td>{{ r.tipo_vehiculo }}</td>
+            <td class="text-muted">{% if r.fecha_entrada %}{{ r.fecha_entrada|date:"d/m/Y" }}{% elif r.fecha_salida %}{{ r.fecha_salida|date:"d/m/Y" }}{% else %}---{% endif %}</td>
+            <td>{% if r.fecha_entrada %}{{ r.fecha_entrada|date:"h:i A" }}{% else %}---{% endif %}</td>
+            <td>
+              {% if r.fecha_salida %} 
+                {{ r.fecha_salida|date:"h:i A" }} 
+              {% else %}
+                <span class="badge bg-success">En Parqueadero</span>
+              {% endif %}
+            </td>
+            <td class="text-muted">{{ r.operario.username|default:"---" }}</td>
+            <td>
+              {% if r.total_pagar > 0 %}
+                <span class="badge bg-warning text-dark border border-warning">Pago Recibido: ${{ r.total_pagar|intcomma }}</span>
+              {% else %}
+                {% if r.fecha_vencimiento %}
+                  {% if r.dias_restantes_mensualidad < 0 %}
+                    <span class="text-danger small font-weight-bold">Vencido (hace {{ r.dias_vencido_mensualidad }} días)</span>
+                  {% else %}
+                    <span class="text-primary small">Vigente (vence {{ r.fecha_vencimiento|date:"d/m" }})</span>
+                  {% endif %}
+                {% else %}
+                  <span class="text-muted small">Movimiento de rutina</span>
+                {% endif %}
+              {% endif %}
+            </td>
+            <td>
+              <a href="{% url 'eliminar_reserva' r.id %}" class="btn-eliminar" onclick="return confirm('¿Seguro que quieres borrar este registro?');">Eliminar</a>
+            </td>
+          </tr>
+          {% endif %}
+        {% endfor %}
+        <tr id="monthly-empty-row">
+          <td colspan="8" class="text-muted">No hay movimientos de mensualidad registrados.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const monthlyRows = document.querySelectorAll('.monthly-row');
+    const emptyRow = document.getElementById('monthly-empty-row');
+    if (emptyRow) {
+      emptyRow.style.display = monthlyRows.length ? 'none' : '';
+    }
+  });
+</script>
+{% endblock %}

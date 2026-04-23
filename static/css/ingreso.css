@@ -1,0 +1,118 @@
+.page-shell {
+    min-height: calc(100vh - 210px);
+}
+
+.seccion-ingreso {
+    display: grid;
+    place-items: center;
+    padding: 0.5rem;
+}
+
+.tarjeta-panel {
+    width: min(460px, 100%);
+    border-radius: 1.25rem;
+    border: 1px solid #dbe4ef;
+    background:
+        linear-gradient(180deg, #ffffff 0%, #f9fbff 100%);
+    box-shadow: 0 25px 55px rgba(21, 31, 45, 0.16);
+    padding: 2rem 1.6rem 1.5rem;
+    text-align: center;
+    animation: pop-in 0.35s ease;
+}
+
+.titulo-panel {
+    margin: 0 0 1.3rem;
+    font-size: clamp(1.8rem, 5vw, 2.3rem);
+    letter-spacing: 0.08em;
+    font-weight: 800;
+}
+
+.contenedor-input-placa {
+    margin-bottom: 0.95rem;
+}
+
+.input-placa-dinamico {
+    font-size: clamp(2rem, 7vw, 2.8rem);
+    font-weight: 800;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    text-align: center;
+    padding: 0.55rem 0.4rem;
+    border-radius: 0.9rem;
+    border: 2px solid #d4deea;
+    color: #1c2733;
+}
+
+.input-placa-dinamico::placeholder {
+    letter-spacing: 0.12em;
+    color: #98a7b8;
+}
+
+.selector-vehiculo .btn {
+    border-radius: 0.7rem;
+    font-weight: 700;
+    border: 2px solid #d4deea;
+    padding: 0.7rem 0.4rem;
+}
+
+.btn-check:checked + .btn-outline-primary {
+    background: linear-gradient(145deg, #2287ff, #1568d8);
+    border-color: #1568d8;
+    color: #fff;
+    transform: translateY(-1px);
+}
+
+.btn-accion-premium {
+    border: 0;
+    width: 100%;
+    border-radius: 0.85rem;
+    padding: 0.95rem;
+    color: #fff;
+    font-size: 1.05rem;
+    font-weight: 800;
+    letter-spacing: 0.03em;
+    background: linear-gradient(145deg, #1f9a59, #157142);
+    box-shadow: 0 10px 24px rgba(31, 154, 89, 0.28);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.btn-accion-premium:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 14px 30px rgba(31, 154, 89, 0.35);
+}
+
+.link-volver {
+    display: inline-block;
+    margin-top: 1.15rem;
+    color: #607083;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.link-volver:hover {
+    color: #1e2c3d;
+    text-decoration: underline;
+}
+
+.invalid-plate {
+    animation: shake 0.35s;
+    border-color: #d94848 !important;
+}
+
+@keyframes pop-in {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    50% { transform: translateX(5px); }
+    75% { transform: translateX(-5px); }
+}
